@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
         AutoCompleteTextView autoComplete = (AutoCompleteTextView) findViewById(R.id.autoCompleteNome);
         autoComplete.setAdapter(adapterLocal);
-
         /*Fim AutoComplete*/
 
         /*Spinner*/
@@ -245,6 +244,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
         c.close();
 
+        autoComplete.getText().clear();
+
         recreate();
     }
 
@@ -270,15 +271,20 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
                 break;
 
-            case R.id.mainMenuGestao:
+            case R.id.mainMenuGestao: {
 
                 Intent it = new Intent(this, GestaoActivity.class);
                 startActivity(it);
 
                 break;
+            }
+            case R.id.mainMenuLugares: {
 
-            case R.id.mainMenuLugares:
+                Intent it = new Intent(this, RelatorioActivity.class);
+                startActivity(it);
+
                 break;
+            }
         }
         return true;
     }
