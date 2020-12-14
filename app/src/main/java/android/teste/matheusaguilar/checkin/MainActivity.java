@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     BancoDeDados bd;
 
-    private int categoriaId;
+    private Integer categoriaId;
     private ArrayList<Integer> categoriaIds;
 
     private LocationManager lm;
@@ -80,9 +81,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             locais.add(cursorLocais.getString(0));
         }
 
-        locais.add("Teste");
-        locais.add("AAAA");
-
         ArrayAdapter<String> adapterLocal = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, locais);
 
         AutoCompleteTextView autoComplete = (AutoCompleteTextView) findViewById(R.id.autoCompleteNome);
@@ -95,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         Spinner spinner = (Spinner) findViewById(R.id.spinnerCategoria);
         spinner.setOnItemSelectedListener(this);
 
-        Cursor cursorCategorias = bd.buscar("Categoria", new String[]{"nome, categoriaId"}, "", "idCategoria");
+        Cursor cursorCategorias = bd.buscar("Categoria", new String[]{"nome, idCategoria"}, "", "idCategoria");
         ArrayList<String> categorias = new ArrayList<String>();
         categoriaIds = new ArrayList<Integer>();
 
@@ -191,7 +189,54 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         categoriaId = categoriaIds.get(position).intValue();
     }
 
-    public void fazCheckIn(View v){
+    public void cancelCheckIn(String msg){
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
 
+
+    public void fazCheckIn(View v){
+        AutoCompleteTextView autoComplete = (AutoCompleteTextView) findViewById(R.id.autoCompleteNome);
+        String nome = autoComplete.getText().toString();
+
+        if(nome.equals("")){
+            cancelCheckIn("É necessário preencher o nome do estabelecimento");
+            return;
+        }
+
+        Cursor c = bd.buscar("Checkin", new String[]{"qtdVisitas"}, "Local='" + nome + "'", "Local");
+
+        if(c == null || c.getCount() <= 0) {
+            if (categoriaId == null) {
+                cancelCheckIn("É necessário escolher uma categoria");
+                return;
+            }
+
+            if (local == null) {
+                cancelCheckIn("Não foi possível encontrar a sua localização");
+                return;
+            }
+
+            ContentValues valores = new ContentValues();
+
+            valores.put("Local", nome);
+            valores.put("qtdVisitas", 1);
+            valores.put("cat", categoriaId);
+            valores.put("latitude", local.latitude);
+            valores.put("longitude", local.longitude);
+
+            bd.inserir("Checkin", valores);
+        }
+        else{
+
+            c.moveToNext();
+            Integer visitas = c.getInt(0) + 1;
+
+            ContentValues valores = new ContentValues();
+            valores.put("qtdVisitas", visitas);
+
+            bd.atualizar("Checkin", valores, "Local='" + nome + "'");
+        }
+
+        recreate();
     }
 }
