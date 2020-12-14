@@ -74,6 +74,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             mMap.addMarker(new MarkerOptions().position(posicao).title(titulo).snippet(descricao));
         }
+
+        c.close();
     }
 
     @Override
@@ -95,7 +97,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.mapsMenuVoltar:
                 finish();
                 break;
-            case R.id.mainMenuGestao:
+            case R.id.mapsMenuGestao:
 
                 Intent it = new Intent(this, GestaoActivity.class);
 
@@ -103,7 +105,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(it);
 
                 break;
-            case R.id.mainMenuLugares:
+            case R.id.mapsMenuLugares:
                 break;
             case MAPANORMAL:
                 mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);

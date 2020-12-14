@@ -73,6 +73,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         /*Banco de Dados */
 
         bd = BancoDeDados.getInstance();
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
 
         /*Autocomplete*/
 
@@ -82,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         while(cursorLocais.moveToNext()){
             locais.add(cursorLocais.getString(0));
         }
+
+        cursorLocais.close();
 
         ArrayAdapter<String> adapterLocal = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, locais);
 
@@ -104,17 +111,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             categoriaIds.add(cursorCategorias.getInt(1));
         }
 
+        cursorCategorias.close();
+
         ArrayAdapter<String> adapterCategoria = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categorias);
         adapterCategoria.setDropDownViewResource(android.R.layout.simple_spinner_item);
 
         spinner.setAdapter(adapterCategoria);
 
         /*Fim Spinner*/
-    }
-
-    @Override
-    protected void onStart(){
-        super.onStart();
 
         provider = lm.getBestProvider(criteria, true);
 
@@ -238,6 +242,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
             bd.atualizar("Checkin", valores, "Local='" + nome + "'");
         }
+
+        c.close();
 
         recreate();
     }
