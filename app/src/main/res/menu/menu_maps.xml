@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <item android:id="@+id/mainMenuMapa"
-        android:title="Mapa de Check-In"/>
-    <item android:id="@+id/mainMenuGestao"
+    <item android:id="@+id/mapsMenuVoltar"
+        android:title="Voltar"/>
+    <item android:id="@+id/mapsMenuGestao"
         android:title="Gestão de Check-In" />
-    <item android:id="@+id/mainMenuLugares"
+    <item android:id="@+id/mapsMenuLugares"
         android:title="Lugares mais visitados" />
 </menu>

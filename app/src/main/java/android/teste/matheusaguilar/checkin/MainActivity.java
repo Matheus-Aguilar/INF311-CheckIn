@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Criteria;
@@ -17,6 +18,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -238,5 +240,35 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
 
         recreate();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.mainMenuMapa:
+
+                if(local == null){
+                    Toast.makeText(this,"Não foi possível encontrar o seu local", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Bundle bundle = new Bundle();
+
+                    bundle.putDouble("latitude", local.latitude);
+                    bundle.putDouble("longitude", local.longitude);
+
+                    Intent it = new Intent(this, MapsActivity.class);
+                    it.putExtras(bundle);
+
+                    startActivity(it);
+                }
+
+                break;
+
+            case R.id.mainMenuGestao:
+                break;
+            case R.id.mainMenuLugares:
+                break;
+        }
+        return true;
     }
 }
