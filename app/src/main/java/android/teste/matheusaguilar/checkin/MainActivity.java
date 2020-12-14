@@ -265,7 +265,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 break;
 
             case R.id.mainMenuGestao:
+
+                Intent it = new Intent(this, GestaoActivity.class);
+                startActivity(it);
+
                 break;
+
             case R.id.mainMenuLugares:
                 break;
         }
